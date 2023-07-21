@@ -30,9 +30,9 @@ async function run() {
   try {
 // DataBases
     const userCollection = client.db('associativeUpliftment').collection('usersCollection')
+    const orderCollection = client.db('associativeUpliftment').collection('ordersCollection')
 
-// const user ={name, number, email, verify: false, }
-//             axios.post('http://localhost:7000/users', user)
+
     // User Adding to Database
     app.post('/users', async(req,res)=>{
       const user = req.body;
@@ -42,9 +42,25 @@ async function run() {
         return res.send({massage: 'User Already Exist'})
       }
 
+
       const result = await userCollection.insertOne(user)
       res.send(result)
     })
+          // Order Database
+    app.post('/orders', async(req, res) =>{
+      const order = req.body;
+      console.log(order)
+      const result = await orderCollection.insertOne(order)
+      res.send(result)
+    })
+
+    app.get('/orders/:email', async(req, res) =>{
+      const {email}  = req.params;
+      const  query = {email}
+      const result = await orderCollection.find(query).toArray()
+      res.send(result) 
+    })
+
 
 
 
