@@ -28,6 +28,28 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+// DataBases
+    const userCollection = client.db('associativeUpliftment').collection('usersCollection')
+
+// const user ={name, number, email, verify: false, }
+//             axios.post('http://localhost:7000/users', user)
+    // User Adding to Database
+    app.post('/users', async(req,res)=>{
+      const user = req.body;
+      const query = {email: user?.email}
+      const existedUser = await userCollection.findOne(query);
+      if(existedUser){
+        return res.send({massage: 'User Already Exist'})
+      }
+
+      const result = await userCollection.insertOne(user)
+      res.send(result)
+    })
+
+
+
+
+
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     // Send a ping to confirm a successful connection
