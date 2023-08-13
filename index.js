@@ -72,6 +72,22 @@ async function run() {
       const result = await userCollection.insertOne(user);
       res.send(result);
     });
+    // Getting user from Database
+
+    app.get('/users', async(req,res)=>{
+      const result = await userCollection.find().toArray();
+      console.log(result)
+      res.send(result)
+    })
+    app.get('/users/:email', async(req,res)=>{
+      const {email} = req.params;
+      const query = {email: email}
+      const result = await userCollection.findOne(query);
+      console.log(result)
+      res.send(result)
+    })
+
+
     // Order Database
     app.post("/orders", async (req, res) => {
       const order = req.body;
