@@ -38,7 +38,7 @@ app.post("/create-payment-intent", async(req, res) =>{
   }
 })
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASS}@cluster0.vlmivx3.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -76,7 +76,6 @@ async function run() {
 
     app.get('/users', async(req,res)=>{
       const result = await userCollection.find().toArray();
-      console.log(result)
       res.send(result)
     })
     app.get('/users/:email', async(req,res)=>{
@@ -102,6 +101,33 @@ async function run() {
       const result = await orderCollection.find(query).toArray();
       res.send(result);
     });
+    app.get("/orders", async (req, res) => {
+      
+      const result = await orderCollection.find().toArray();
+      res.send(result);
+    });
+    app.patch("/orders/accept/:id", async(req, res) =>{
+      const id = req.params.id;
+      const item = { _id: new ObjectId(id) }
+      const updateDoc = {
+        $set:{
+          status: "Approved"
+        },
+      };
+      const result = await orderCollection.updateOne(item, updateDoc)
+      res.send(result)
+    })
+    app.patch("/orders/delete/:id", async(req, res) =>{
+      const id = req.params.id;
+      const item = { _id: new ObjectId(id) }
+      const updateDoc = {
+        $set:{
+          status: "Declined"
+        },
+      };
+      const result = await orderCollection.updateOne(item, updateDoc)
+      res.send(result)
+    })
 
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
