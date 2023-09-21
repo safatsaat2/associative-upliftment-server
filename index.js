@@ -59,6 +59,9 @@ async function run() {
     const orderCollection = client
       .db("associativeUpliftment")
       .collection("ordersCollection");
+      const ticketCollection = client
+      .db("associativeUpliftment")
+      .collection("ticketCollection")
 
     // User Adding to Database
     app.post("/users", async (req, res) => {
@@ -90,7 +93,7 @@ async function run() {
     // Order Database
     app.post("/orders", async (req, res) => {
       const order = req.body;
-      console.log(order);
+  
       const result = await orderCollection.insertOne(order);
       res.send(result);
     });
@@ -127,6 +130,14 @@ async function run() {
       };
       const result = await orderCollection.updateOne(item, updateDoc)
       res.send(result)
+    })
+    // Ticket Collection
+    app.post("/tickets", async(req, res) =>{
+      const info = req.body
+
+      const result = await ticketCollection.insertOne(info);
+      res.send(result);
+      
     })
 
     // Connect the client to the server	(optional starting in v4.7)
