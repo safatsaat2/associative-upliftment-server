@@ -105,7 +105,6 @@ async function run() {
       res.send(result);
     });
     app.get("/orders", async (req, res) => {
-      
       const result = await orderCollection.find().toArray();
       res.send(result);
     });
@@ -139,6 +138,10 @@ async function run() {
       res.send(result);
       
     })
+    app.get("/tickets", async (req, res) => {
+      const result = await ticketCollection.find().toArray();
+      res.send(result);
+    });
 
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
